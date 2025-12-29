@@ -42,7 +42,7 @@ app.post('/visitor-sign-out', async (req, res) => {
 
   await job.attach({ value: message });
   
-  res.send();
+  res.send({status: 'success'});
 });
 
 app.use(errorMiddleware());

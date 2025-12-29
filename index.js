@@ -35,12 +35,12 @@ app.post('/visitor-sign-out', async (req, res) => {
   const job = envoy.job;
   const allowedDuration = parseInt(envoy.meta.config.ALLOWEDDURATION, 10) || 60;
   const visitor = envoy.payload;
-  const stayDuration = stayDurationMinutes(visitor.signedInAt, visitor.signedOutAt)
+  const stayDuration = stayDurationMinutes(visitor.attributes["signed-in-at"], visitor.attibutes['signed-out-at'])
 
   const overstayed = stayDuration > allowedDuration;
   const message = overstayed 
-    ? `Visitor overstayed by ${stayDuration - allowedDuration} minutes.` 
-    : `Visitor stay appropriate! (${stayDuration} mins, ${allowedDuration} allowed) in ${visitor.attributes["signed-in-at"]} out ${visitor.attibutes['signedOutAt']}`;
+    ? `Visitor overstayed by ${stayDuration - allowedDuration} minutes. in ${visitor.attributes["signed-in-at"]} out ${visitor.attibutes['signed-out-at']}` 
+    : `Visitor stay appropriate! (${stayDuration} mins, ${allowedDuration} allowed) in ${visitor.attributes["signed-in-at"]} out ${visitor.attibutes['signed-out-at']}`;
 
   await job.attach({ label: "Stay Duration", value: message });
   

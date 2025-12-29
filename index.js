@@ -31,14 +31,13 @@ app.post('/visitor-sign-out', async (req, res) => {
   const job = envoy.job;
   const allowedDuration = envoy.meta.config.ALLOWEDDURATION;
   const visitor = envoy.payload;
-  const visitorName = visitor.attributes['full-name'];
-
   const overstayed = timeDeltaMinutes(visitor.signedInAt, visitor.signedOutAt) > allowedDuration
 
-  const message = `${visitorName} stayed beyond their allotted time`;
-  await job.attach({ value: message });
+  if (overstayed) {
+    await job.attach({ value: "Visitor stayed beyond their allotted time." });
+  }
   
-  res.send();
+  res.send({allowedDuration});
 });
 
 app.use(errorMiddleware());

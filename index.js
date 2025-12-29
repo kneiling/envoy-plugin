@@ -40,7 +40,7 @@ app.post('/visitor-sign-out', async (req, res) => {
   const overstayed = stayDuration > allowedDuration;
   const message = overstayed 
     ? `Visitor overstayed by ${stayDuration - allowedDuration} minutes.` 
-    : `Visitor stay appropriate! (${stayDuration} mins, ${allowedDuration} allowed)`;
+    : `Visitor stay appropriate! (${stayDuration} mins, ${allowedDuration} allowed) in ${visitor.signedInAt} out ${visitor.signedOutAt}`;
 
   await job.attach({ label: "Stay Duration", value: message });
   

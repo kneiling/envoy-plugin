@@ -36,8 +36,9 @@ app.post('/visitor-sign-out', async (req, res) => {
 //   if (overstayed) {
 //     await job.attach({ value: "Visitor stayed beyond their allotted time." });
 //   }
+const message = `overstayed: ${overstayed}, stay: ${timeDeltaMinutes(visitor.signedInAt, visitor.signedOutAt)}`
 
-    await job.attach({value: `overstayed: ${overstayed}, stay: ${timeDeltaMinutes(visitor.signedInAt, visitor.signedOutAt)}`})
+    await job.attach({value: message})
   
   res.send({allowedDuration});
 });

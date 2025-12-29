@@ -42,7 +42,7 @@ app.post('/visitor-sign-out', async (req, res) => {
 
   await job.attach({ label: "Stay Duration", value: message });
   
-  res.send({status: 'success'});
+  res.send({});
 });
 
 app.use(errorMiddleware());

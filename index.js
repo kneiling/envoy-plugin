@@ -33,9 +33,11 @@ app.post('/visitor-sign-out', async (req, res) => {
   const visitor = envoy.payload;
   const overstayed = timeDeltaMinutes(visitor.signedInAt, visitor.signedOutAt) > allowedDuration
 
-  if (overstayed) {
-    await job.attach({ value: "Visitor stayed beyond their allotted time." });
-  }
+//   if (overstayed) {
+//     await job.attach({ value: "Visitor stayed beyond their allotted time." });
+//   }
+
+    await job.attach({value: `overstayed: ${overstayed}, stay: ${timeDeltaMinutes(visitor.signedInAt, visitor.signedOutAt)}`})
   
   res.send({allowedDuration});
 });

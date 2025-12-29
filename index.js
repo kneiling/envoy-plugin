@@ -40,7 +40,7 @@ app.post('/visitor-sign-out', async (req, res) => {
     ? `Visitor overstayed by ${stayDuration - allowedDuration} minutes.` 
     : "Visitor stay appropriate!";
 
-  await job.attach({ value: message });
+  await job.attach([{ value: message }]);
   
   res.send({status: 'success'});
 });

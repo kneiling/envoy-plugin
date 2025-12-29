@@ -8,7 +8,9 @@ app.post('/stay-duration', (req, res) => {
   res.send([
     {
       label: 'How long can visitors stay? (in minutes)',
-      value: 60,
+      key: 'ALLOWEDDURATION',
+      type: 'integer',
+      defaultValue: 60,
       min: 0,
       max: 180
     },
@@ -29,15 +31,18 @@ function timeDeltaMinutes(date1, date2) {
 app.post('/visitor-sign-out', async (req, res) => {
   const envoy = req.envoy; // our middleware adds an "envoy" object to req.
   const job = envoy.job;
-  const allowedDuration = parseInt(envoy.meta.config.ALLOWEDDURATION, 60);
+  const allowedDuration = parseInt(envoy.meta.config.ALLOWEDDURATION, 10) || 60;
   const visitor = envoy.payload;
   const stayDuration = timeDeltaMinutes(visitor.signedInAt, visitor.signedOutAt)
 
-  const message =  stayDuration > allowedDuration ? "Visitor stayed beyond their allotted time." : "visitor stay appropriate!"
-  
+  const overstayed = stayDuration > allowedDuration;
+  const message = overstayed 
+    ? `Visitor overstayed by ${stayDuration - allowedDuration} minutes.` 
+    : "Visitor stay appropriate!";
+
   await job.attach({ value: message });
   
-  res.send({allowedDuration});
+  res.send();
 });
 
 app.use(errorMiddleware());

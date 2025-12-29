@@ -17,12 +17,14 @@ app.post('/stay-duration', (req, res) => {
   ]);
 });
 
-function timeDeltaMinutes(date1, date2) {
-  const time1 = new Date(date1).getTime();
-  const time2 = new Date(date2).getTime();
+function stayDurationMinutes(signIn, signOut) {
+  const time1 = new Date(signIn).getTime();
+  const time2 = new Date(signOut).getTime();
 
-  const differenceInMilliseconds = Math.abs(time2 - time1);
-  const differenceInMinutes = differenceInMilliseconds / 60000;
+  if (time2 < time1 ) {
+    return -1
+  }
+  const differenceInMinutes = (time2 - time1) / 60000;
 
   return Math.floor(differenceInMinutes);
 }
@@ -33,14 +35,12 @@ app.post('/visitor-sign-out', async (req, res) => {
   const job = envoy.job;
   const allowedDuration = parseInt(envoy.meta.config.ALLOWEDDURATION, 10) || 60;
   const visitor = envoy.payload;
-//   const stayDuration = timeDeltaMinutes(visitor.signedInAt, visitor.signedOutAt)
+  const stayDuration = stayDurationMinutes(visitor.signedInAt, visitor.signedOutAt)
 
-//   const overstayed = stayDuration > allowedDuration;
-//   const message = overstayed 
-//     ? `Visitor overstayed by ${stayDuration - allowedDuration} minutes.` 
-//     : "Visitor stay appropriate!";
-
-    const message = "show me this message"
+  const overstayed = stayDuration > allowedDuration;
+  const message = overstayed 
+    ? `Visitor overstayed by ${stayDuration - allowedDuration} minutes.` 
+    : "Visitor stay appropriate!";
 
   await job.attach({ label: "Stay Duration", value: message });
   

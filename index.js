@@ -16,8 +16,8 @@ app.post('/stay-duration', (req, res) => {
 });
 
 function timeDeltaMinutes(date1, date2) {
-  const time1 = date1.getTime();
-  const time2 = date2.getTime();
+  const time1 = new Date(date1).getTime();
+  const time2 = new Date(date2).getTime();
 
   const differenceInMilliseconds = Math.abs(time2 - time1);
   const differenceInMinutes = differenceInMilliseconds / 60000;
